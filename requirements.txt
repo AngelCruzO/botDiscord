@@ -1,0 +1,8 @@
+discord
+validators
+python-dotenv
+asyncio
+platform
+colorama
+validators
+
