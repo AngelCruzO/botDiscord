@@ -5,13 +5,14 @@ import os
 import platform
 import random
 import time
-import vt
+#import vt
 import requests
 
 from colorama import Back, Fore, Style
 from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
+from Global.Global import Global
 from UI.Modals import AnunciosModal
 from UI.Selects.PremiosSelect import PremiosSelect
 
@@ -30,48 +31,26 @@ prefix = "!"
 #Variable ciente de discord
 client = commands.Bot(command_prefix=prefix, intents=discord.Intents.all())
 
-#Variable cliente Virus Total
-clientVT = vt.Client(VT_TOKEN)
-
-async def scanner(url):
-    async with clientVT:
-        analysis = await clientVT.scan_url_async(url)
-        while True:
-            analysis = await clientVT.get_object_async(f"/analyses/{analysis.id}")
-            if analysis.status == "completed":
-                break
-    
-        url_id = vt.url_id(url)
-        urlScan = await clientVT.get_object_async(f"/urls/{url_id}")
-
-        return urlScan.last_analysis_stats
-
-#async def result():
-#    result = await  scanner("www.googlw.com")
-#    print(result)
+gbInstance = Global()
 
 @client.event
 async def on_ready():
     synced = await client.tree.sync()
     print(f"{str(len(synced))}")
 
-#id 1233611453253156926 name testbot
-@client.command(aliases=['hi'])
-async def hola(ctx):
-    if ctx.channel.name == 'testbot':
-        print(adminRoles)
-        await ctx.send("Hello Magic World")
-    else:
-        await ctx.send("Lo siento mis poderes no sirven en este reino")
-
 #Scanear URL
 @client.command(aliases=['scan', 'scanner'])
 async def virus(ctx, url="www.google.com"):
-    if ctx.channel.name == 'testbot':
-        result = await scanner(url)
-        await ctx.send(f"Hola Mundo: {result}")
-    else:
-        await ctx.send("Lo siento mis poderes no sirven en este reino")
+    result = gbInstance.analisysURL(url,VT_TOKEN)
+
+    embed = discord.Embed(title="Analisis completado", description=f"Estos son los resultados para **{url}**", color=discord.Color.green(), timestamp=datetime.datetime.now(datetime.UTC))
+
+    embed.add_field(name="Maliciosos", value=f"{result['malicious']}")
+    embed.add_field(name="Sospechosos", value=f"{result['suspicious']}")
+    embed.add_field(name="No detectados", value=f"{result['undetected']}")
+    embed.add_field(name="Inofensivo", value=f"{result['harmless']}")
+
+    await ctx.send(embed=embed) 
 
 #Status web
 @client.command(aliases=['status','down'])
@@ -86,8 +65,6 @@ async def estado(ctx, url="https://www.google.com"):
         await ctx.send("Lo siento mis poderes no sirven en este reino")
 
 #Comandos slash
-
-#Recompensas
 
 #Soporte
 @client.tree.command(name="soporte", description="Proporciona ayuda sobre algun bug o contacto personal")
@@ -124,5 +101,3 @@ async def premios(interaction: discord.Interaction):
         await interaction.response.send_message(content="Lo siento mis poderes no sirven en este reino")
 
 client.run(DC_TOKEN)
-
-clientVT.close()

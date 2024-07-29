@@ -9,10 +9,9 @@ class AnunciosModal(discord.ui.Modal, title="Anuncio a la comunidad"):
     name = discord.ui.TextInput(label="Evento", placeholder="Cual es el nombre del anunció", style=discord.TextStyle.long)
     description = discord.ui.TextInput(label="Descripción", placeholder="Describe el anuncio que enviaras", style=discord.TextStyle.long)
 
-    async def on_submit(self, interaction:discord.Interaction, member:discord.Member=None):
+    async def on_submit(self, interaction:discord.Interaction):
 
-        if member == None:
-            member = interaction.user
+        member = interaction.user
         
 
         embed = discord.Embed(title=f"{self.name}", description="Atención Comunidad", color=discord.Color.green(), timestamp=datetime.datetime.now(datetime.UTC))
