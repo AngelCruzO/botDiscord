@@ -6,3 +6,7 @@ channel = "stable-24_05"
 
 [deployment]
 run = ["sh", "-c", "python brujito.py"]
+
+[[ports]]
+localPort = 8080
+externalPort = 80
