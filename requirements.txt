@@ -1,6 +1,7 @@
-discord
-validators
-python-dotenv
+discord.py
 asyncio
-colorama
 requests
+validators
+urllib3
+python-dotenv
+colorama

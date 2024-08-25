@@ -100,4 +100,9 @@ async def premios(interaction: discord.Interaction):
     else:
         await interaction.response.send_message(content="Lo siento mis poderes no sirven en este reino")
 
-client.run(DC_TOKEN)
+try:
+    client.run(DC_TOKEN)
+except discord.errors.HTTPException:
+    print("\n\nBlocked by rate limits\nRestarting\n\n\n")
+    os.system("kill 1")
+    os.system("python restart.py")
