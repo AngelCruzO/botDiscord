@@ -1,7 +1,13 @@
 discord.py
 asyncio
+<<<<<<< HEAD
 requests
 validators
 urllib3
 python-dotenv
 colorama
+=======
+colorama
+requests
+discord.py
+>>>>>>> fc2799096aeda48a97fb70945bc39b0a2e7291d6
