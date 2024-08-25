@@ -4,3 +4,4 @@ python-dotenv
 asyncio
 colorama
 requests
+discord.py
