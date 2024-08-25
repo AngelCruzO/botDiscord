@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 from Global.Global import Global
 from UI.Modals import AnunciosModal
 from UI.Selects.PremiosSelect import PremiosSelect
+from keep_alive import keep_alive
 
 #Cargar variables de entorno
 load_dotenv()
@@ -101,6 +102,7 @@ async def premios(interaction: discord.Interaction):
         await interaction.response.send_message(content="Lo siento mis poderes no sirven en este reino")
 
 try:
+    keep_alive()
     client.run(DC_TOKEN)
 except discord.errors.HTTPException:
     print("\n\nBlocked by rate limits\nRestarting\n\n\n")
