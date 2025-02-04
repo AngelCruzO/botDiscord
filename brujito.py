@@ -3,10 +3,9 @@ import datetime
 import discord
 import os
 import platform
+import requests
 import random
 import time
-#import vt
-import requests
 
 from colorama import Back, Fore, Style
 from discord import app_commands
@@ -14,8 +13,8 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from Global.Global import Global
 from UI.Modals import AnunciosModal
-from UI.Selects.PremiosSelect import PremiosSelect
-from keep_alive import keep_alive
+from UI.Selects import PremiosSelect, SupportSelect
+#from keep_alive import keep_alive
 
 #Cargar variables de entorno
 load_dotenv()
@@ -71,7 +70,7 @@ async def estado(ctx, url="https://www.google.com"):
 @client.tree.command(name="soporte", description="Proporciona ayuda sobre algun bug o contacto personal")
 async def soporte(interaction:discord.Interaction):
     if interaction.channel.name == 'testbot':
-        await interaction.response.send_message(content="En que puedo ayudarte")
+        await interaction.response.send_message(content="En que puedo ayudarte", view=SupportSelect(), ephemeral=True)
     else:
         await interaction.response.send_message(content="Lo siento mis poderes no sirven en este reino")
 
@@ -79,9 +78,8 @@ async def soporte(interaction:discord.Interaction):
 
 #Anuncios
 @client.tree.command(name="anuncio", description="Manda un anunción al canal de anuncios")
-async def anuncio(interaction:discord.Interaction, member:discord.Member=None):
-    if member == None:
-        member = interaction.user
+async def anuncio(interaction:discord.Interaction):
+    member = interaction.user
     if interaction.channel.name == '・🔈・anuncios':
         roles = [role.name for role in member.roles]
         guildRoles = [role.name for role in interaction.guild.roles]
@@ -101,10 +99,29 @@ async def premios(interaction: discord.Interaction):
     else:
         await interaction.response.send_message(content="Lo siento mis poderes no sirven en este reino")
 
+#Reiniciar
+@client.tree.command(name="reiniciar", description="Reinicio del bot")
+async def reiniciar(interaction: discord.Interaction):
+    if interaction.channel.name == "testbot":
+        member = interaction.user
+        roles = [role.name for role in member.roles]
+        guildRoles = [role.name for role in interaction.guild.roles]
+        adminRoles = [guildRoles[25], guildRoles[26]]
+
+        if roles[1] in adminRoles:
+            #global.restart()
+            await interaction.response.send_message(content="Brujito a tomado un descanso, pero ya ha vuelto")
+        else:
+            await interaction.response.send_message(content="Alto ahi, no cuentas con el pase de viajero")
+    else:
+        await interaction.response.send_message(content="Lo siento mis poderes no sirven en este sitio")
+
 try:
-    keep_alive()
+#    keep_alive()
     client.run(DC_TOKEN)
 except discord.errors.HTTPException:
     print("\n\nBlocked by rate limits\nRestarting\n\n\n")
     os.system("kill 1")
     os.system("python restart.py")
+
+ 

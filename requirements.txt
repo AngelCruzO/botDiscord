@@ -6,3 +6,5 @@ urllib3
 python-dotenv
 colorama
 flask
+diffusers
+
